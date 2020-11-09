@@ -1,0 +1,46 @@
+{% extends "auctions/layout.html" %}
+{% load humanize %}
+{% block body %}
+<section class="container-panel">
+    <h2 class="header-title">{{ title }}</h2>
+    {% for auction in auctions %}    
+        {% for notif in notif_msg %}
+            {% if auction.id == notif.auction_item.id %}
+                <div class="card">    
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2 center-block">
+                                <img src="{{ auction.image }}" alt="Nimbus 2000" class="img-item-message">
+                            </div>
+                            <div class="col-md-8">
+                                <a href="{% url 'item_detail' title=auction.title id=auction.id %}">
+                                    <h1 class="user-header"> {{ auction.seller }} </h1>
+                                </a>
+                                <a href="{% url 'item_detail' title=auction.title id=auction.id %}">
+                                    <span class=""> {{ auction.title }} </span>
+                                </a>
+                                <p class="notif_msg">
+                                    {{ notif.message }}
+                                </p>
+                                <a href="{% url 'message_detail' auction.id %}" class="stretched-link"></a>
+                            </div>
+                            <div class="col-md-2 text-panel-right">
+                                <div class="item-crdate">
+                                    {{ auction.create_date|date:"d-m-Y" }}
+                                </div>
+                                <span>
+                                    {% if notif.read == False %}
+                                        <div class="notif-msg_unread-icon"></div>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% empty %}
+        <li>No auction is found</li>
+    {% endfor %}
+</section>
+{% endblock %}

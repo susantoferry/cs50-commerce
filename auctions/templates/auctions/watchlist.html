@@ -1,0 +1,56 @@
+{% extends "auctions/layout.html" %}
+{% load humanize %}
+{% block body %}
+<section class="container-panel">
+    <!-- <h2>Active Listings</h2> -->
+    <h2 class="header-title">{{ title }}</h2>
+    
+    <div class="listing-type-panel">
+        <a href="{% url 'watchlist_by_cat' 'active' %}" class="btn btn-light">Active</a>
+        <a href="{% url 'watchlist_by_cat' 'ended' %}" class="btn btn-light">Ended</a>
+    </div>
+    
+    {% for auction in auctions %}    
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 center-block">
+                        <a href="{% url 'item_detail' title=auction.auction_item.title_to_url id=auction.auction_item.id %}">
+                            <img src="{{ auction.auction_item.image }}" alt="Nimbus 2000" class="img-item">
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        {% if auction.active == 0 %}
+                            <span class="ended-listing">ENDED</span>
+                        {% endif %}
+                        <a href="{% url 'item_detail' title=auction.auction_item.title_to_url id=auction.auction_item.id %}">
+                            <h1 class="item-title"> {{ auction.auction_item.title }} </h1>
+                        </a>
+                        <span class="badge badge-category">{{ auction.auction_item.category }}</span>
+                        <div class="item-price mt-10"> AU ${{ auction.auction_item.price|intcomma }}</div>
+                        <div class="item-bids">
+
+                                {{ auction.auction_item.total }} bids
+                        </div>
+                        <div class="item-crdate">Listed on {{ auction.auction_item.create_date|date:"d-m-Y" }} by {{ auction.auction_item.seller }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="app-cvip-message-container">
+            <section class="page page-notice--information">
+                <div class="page__content">
+                    <div class="item-card-details__wrapper item-card-details__product">
+                        <div class="item-card-details__header">
+                            <div class="item-card-details__header-text">
+                                <span>No auction is found.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endfor %}
+</section>
+{% endblock %}

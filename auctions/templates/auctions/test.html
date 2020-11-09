@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+{% load humanize %}
+{% block body %}
+<section>
+    <!-- <h2>Active Listings</h2> -->
+    <h2 class="header-title">{{ title }}</h2>
+
+    {% for auction in auctions %}    
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 center-block">
+                        <a href=""><img src="{{ auction.image }}" alt="Nimbus 2000" class="img-item"></a>
+                    </div>
+                    <div class="col-md-8">
+                        <a href=""><h1 class="item-title"> {{ auction.title }} </h1></a>
+                        <span class="badge badge-category">{{ auction.category }}</span>
+                        <div class="item-price mt-10"> AU ${{ auction.price|intcomma }}</div>
+                        <div class="item-bids">{{ auction.total }} bids</div>
+                        <div class="item-crdate">Listed on {{ auction.create_date|date:"d-m-Y" }} by {{ auction.seller }}</div>
+                    </div>
+                    <div class="col-md-1">
+                        
+                        <!-- {% if auction.id in watchlist %}
+                            1
+                        {% else %}
+                            2
+                        {% endif %} -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <li>No auction is found</li>
+    {% endfor %}
+</section>
+{% endblock %}
