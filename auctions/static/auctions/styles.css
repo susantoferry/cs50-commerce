@@ -103,11 +103,13 @@ tr {
     color: #f0e9ff;
 }
 
-.header-title {.listing-watchlist-heart li {
-    list-style: none;
-}
+.header-title {
     margin-top: -20px;
     margin-bottom: 30px;
+}
+
+.listing-watchlist-heart li {
+    list-style: none;
 }
 
 .sell-panel {
