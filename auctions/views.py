@@ -177,7 +177,11 @@ def post_listing(request):
     
     return render(request, "auctions/create_auction.html", {
         "notifications": get_notifications(request.user.id),
+<<<<<<< HEAD
         "categories": Category.objects.all(),
+=======
+        "categories": Category.objects.all().order_by("name"),
+>>>>>>> 1f067c3 (re-indexing)
         "sellForm": SellForm(),
     })
 
