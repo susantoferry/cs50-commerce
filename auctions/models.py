@@ -20,7 +20,8 @@ class Auction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="category_auction")
     price = models.DecimalField(max_digits=12, decimal_places=2)
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.URLField()
+    # External image URL, or /auction-image/<id> when the image is stored in AuctionImage.
+    image = models.CharField(max_length=500)
     active = models.BooleanField(default=True)
     create_date = models.DateTimeField(auto_now_add=True)
     modify_date = models.DateTimeField()
@@ -30,6 +31,15 @@ class Auction(models.Model):
 
     def title_to_url(self):
         return self.title.replace(' ', '-')
+
+class AuctionImage(models.Model):
+    # Image bytes stored in MongoDB; kept apart from Auction so listing queries stay small.
+    auction = models.OneToOneField(Auction, on_delete=models.CASCADE, related_name="stored_image")
+    data = models.BinaryField()
+    content_type = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.auction.title} ({self.content_type}, {len(self.data)} bytes)"
 
 class Bid(models.Model):
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="bid_item")

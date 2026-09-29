@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Auction, Bid, Category, Comment, NotificationMsg, User, Watchlist
+from .models import Auction, AuctionImage, Bid, Category, Comment, NotificationMsg, User, Watchlist
 
 # Register your models here.
 
@@ -11,6 +11,7 @@ class PassengerAdmin(admin.ModelAdmin):
     filter_horizontal = ("flights",) """
 
 admin.site.register(Auction)
+admin.site.register(AuctionImage)
 admin.site.register(Bid)
 admin.site.register(Category)
 admin.site.register(Comment)

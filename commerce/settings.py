@@ -11,10 +11,16 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+
+import django_mongodb_backend
+from dotenv import load_dotenv
 """ import sweetify  """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Load local settings (e.g. MONGODB_URI) from .env; see .env.example.
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,10 +38,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'auctions',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'auctions.apps.AuctionsConfig',
+    'auctions.apps.MongoAdminConfig',
+    'auctions.apps.MongoAuthConfig',
+    'auctions.apps.MongoContentTypesConfig',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -76,11 +82,19 @@ WSGI_APPLICATION = 'commerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# MongoDB Atlas. MONGODB_URI comes from .env.
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': django_mongodb_backend.parse_uri(
+        os.environ['MONGODB_URI'],
+        db_name='commerce',
+    ),
+}
+
+# Built-in apps get migrations with ObjectId primary keys (see mongo_migrations/).
+MIGRATION_MODULES = {
+    'admin': 'mongo_migrations.admin',
+    'auth': 'mongo_migrations.auth',
+    'contenttypes': 'mongo_migrations.contenttypes',
 }
 
 AUTH_USER_MODEL = 'auctions.User'
@@ -125,7 +139,7 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = '/login'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
 
 # possible options: 'sweetalert', 'sweetalert2' - default is 'sweetalert2'
 """ SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2' """

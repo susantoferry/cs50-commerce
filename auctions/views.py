@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.db.models import Q, Count
 from datetime import datetime
 
-from .models import Auction, Bid, Category, Comment, NotificationMsg ,User, Watchlist
+from .models import Auction, AuctionImage, Bid, Category, Comment, NotificationMsg ,User, Watchlist
 from .forms import CommentsForm, CommentForm, SellForm
 
 # Create your views here.
@@ -123,6 +123,10 @@ def bid(request, id):
         else:
             messages.add_message(request, messages.ERROR, "You bid cannot be empty.")
             return HttpResponseRedirect(reverse("item_detail", args=(listing_item.title, id,)))
+
+def auction_image(request, id):
+    image = get_object_or_404(AuctionImage, auction=id)
+    return HttpResponse(bytes(image.data), content_type=image.content_type)
 
 def comment1(request, title, id):
     if request.method == "POST":

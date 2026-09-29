@@ -20,5 +20,33 @@
     </form>
 
     Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+
+    <div class="border rounded p-3 mt-4">
+        <h5>Demo accounts</h5>
+        <p class="text-muted small mb-2">Click an account to fill in the login form.</p>
+        <table class="table table-sm table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="demo-account" data-username="ferry" style="cursor: pointer;"><td>ferry</td><td>password</td></tr>
+                <tr class="demo-account" data-username="keele" style="cursor: pointer;"><td>keele</td><td>password</td></tr>
+                <tr class="demo-account" data-username="stacy" style="cursor: pointer;"><td>stacy</td><td>password</td></tr>
+                <tr class="demo-account" data-username="chris" style="cursor: pointer;"><td>chris</td><td>password</td></tr>
+            </tbody>
+        </table>
+    </div>
 </section>
+
+<script>
+    document.querySelectorAll('.demo-account').forEach(row => {
+        row.addEventListener('click', () => {
+            document.querySelector('input[name="username"]').value = row.dataset.username;
+            document.querySelector('input[name="password"]').value = 'password';
+        });
+    });
+</script>
 {% endblock %}
